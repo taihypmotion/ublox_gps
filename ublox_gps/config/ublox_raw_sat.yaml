@@ -1,0 +1,51 @@
+ublox_gps_node:
+  ros__parameters:
+    debug: 1
+    device: "/dev/ttyACM0"
+    frame_id: "gps"
+    rate: 5.0                 # Tốc độ cập nhật 5 Hz (200 ms). Có thể đổi thành 10.0 nếu muốn 10 Hz
+    nav_rate: 1
+    config_on_startup: true
+
+    # Cấu hình khảo sát giả lập phẳng để vượt qua lỗi TMODE3
+    tmode3: 1
+    sv_in:
+      reset: true
+      min_dur: 1
+      acc_lim: 99999.0
+
+    inf:
+      all: false
+
+    # Bật đầy đủ các hệ vệ tinh định vị để bộ lọc F9P sử dụng
+    gnss:
+      gps: true
+      glonass: true
+      galileo: true
+      beidou: true
+      qzss: true
+
+    # Chỉ bật các topic cần thiết cho Graph SLAM và lọc tín hiệu
+    publish:
+      all: false
+      nmea: false
+      nav:
+        pvt: true          # /ublox_gps_node/navpvt (Thông tin chi tiết fix, độ chính xác)
+        sat: false        # Tắt /navstate
+        status: false     # Tắt /navstatus
+        posecef: false    # Tắt /navposecef
+        cov: false        # Tắt /navcov
+        clock: false      # Tắt /navclock
+        svin: false       # Tắt /navsvin
+        timegps: false    # Tắt /navtimegps
+        timeutc: false    # Tắt /navtimeutc
+        relposned: false  # Tắt /navrelposned
+        heading: false    # Tắt /navheading
+      rxm:
+        raw: true         # /rxmraw (Dữ liệu thô vệ tinh cho SLAM)
+        sfrb: true        # /rxmsfrb (Dữ liệu lịch thiên văn Ephemeris)
+        rtcm: true        # /rxmrtcm (Dữ liệu hiệu chuẩn RTCM nếu có)
+      mon:
+        hw: false         # Tắt /monhw
+      aid:
+        all: false        # Tắt toàn bộ /aid
