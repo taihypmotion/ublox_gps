@@ -4,8 +4,11 @@ from launch import LaunchDescription
 from launch_ros.actions import Node
 
 def generate_launch_description():
-    # Đường dẫn chuẩn tới file yaml của bạn
-    config_file = '/home/hyp-jetson-orin-1/gps_ublox/src/ublox/ublox_gps/config/ublox_raw_sat.yaml'
+    config_file = os.path.join(
+        get_package_share_directory('ublox_gps'),
+        'config',
+        'ublox_raw_sat.yaml'
+    )
 
     return LaunchDescription([
         Node(
@@ -13,7 +16,6 @@ def generate_launch_description():
             executable='ublox_gps_node',
             name='ublox_gps_node',
             output='screen',
-            # Ép node phải load toàn bộ các cấu trúc phân cấp phức tạp (hpg, gnss)
             parameters=[config_file]
         )
     ])
