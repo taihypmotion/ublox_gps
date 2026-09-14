@@ -1,18 +1,19 @@
 ublox_gps_node:
   ros__parameters:
     debug: 1
-    device: "/dev/ttyACM0"
+    # Stable across ttyACM renumbering after a USB reconnect.
+    device: "/dev/serial/by-id/usb-u-blox_AG_-_www.u-blox.com_u-blox_GNSS_receiver-if00"
     frame_id: "gps"
     rate: 5.0                 # Tốc độ cập nhật 5 Hz (200 ms). Có thể đổi thành 10.0 nếu muốn 10 Hz
     nav_rate: 1
     config_on_startup: true
 
     # Cấu hình khảo sát giả lập phẳng để vượt qua lỗi TMODE3
-    tmode3: 1
-    sv_in:
-      reset: true
-      min_dur: 1
-      acc_lim: 99999.0
+    tmode3: 0
+    # sv_in:
+    #   reset: true
+    #   min_dur: 1
+    #   acc_lim: 99999.0
 
     inf:
       all: false

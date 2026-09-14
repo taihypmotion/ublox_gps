@@ -280,9 +280,21 @@ void AsyncWorker<StreamT>::readEnd(const asio::error_code& error,
                                    std::size_t bytes_transferred) {
   std::lock_guard<std::mutex> lock(read_mutex_);
   if (error) {
+    // A disconnected CDC-ACM device reports EOF.  Reposting another read on
+    // the same dead file descriptor creates a tight error loop and can fill
+    // the system log in seconds.  Stop this worker and shut down the isolated
+    // ROS driver process; launch respawn will reopen the stable device path.
+    if (error == asio::error::operation_aborted || stopping_) {
+      return;
+    }
     RCLCPP_ERROR(logger_, "U-Blox ASIO input buffer read error: %s, %li",
                  error.message().c_str(),
                  bytes_transferred);
+    stopping_ = true;
+    if (rclcpp::ok()) {
+      rclcpp::shutdown();
+    }
+    return;
   } else if (bytes_transferred > 0) {
     in_buffer_size_ += bytes_transferred;
 

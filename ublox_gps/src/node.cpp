@@ -723,12 +723,27 @@ void UbloxNode::processMonVer() {
         }
       }
       // Last 1-2 lines contain supported GNSS
-      if (i >= extensions.size() - 2) {
-        strs = stringSplit(extensions[i], ";");
-        for (const std::string & str : strs) {
+      // if (i >= extensions.size() - 2) {
+      strs = stringSplit(extensions[i], ";");
+      // for (const std::string & str : strs) {
+        // std::cout << str << " \n" << std::endl;
+      //   gnss_->add(str);
+      // }
+      for (const std::string & str : strs) {
+        if (str == "GPS"   ||
+            str == "GLO"   ||
+            str == "GAL"   ||
+            str == "BDS"   ||
+            str == "SBAS"  ||
+            str == "QZSS"  ||
+            str == "IMES"  ||
+            str == "NAVIC")
+        {
+          std::cout << str << " \n" << std::endl;
           gnss_->add(str);
         }
       }
+      // }
     }
   }
 }

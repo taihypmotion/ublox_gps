@@ -16,6 +16,10 @@ def generate_launch_description():
             executable='ublox_gps_node',
             name='ublox_gps_node',
             output='screen',
-            parameters=[config_file]
+            parameters=[config_file],
+            # The serial worker exits on USB EOF. Respawn resolves the stable
+            # by-id path again after the receiver has re-enumerated.
+            respawn=True,
+            respawn_delay=2.0,
         )
     ])
